@@ -5,6 +5,8 @@ from bullet import Bullet
 
 class Player:
     def __init__(self, x, y, color, controls, direction):
+        self.num_bullets = 15
+        self.inital_cool_time = 20
         self.x = x
         self.y = y
         self.width = 50
@@ -34,16 +36,27 @@ class Player:
 
         if keys[self.controls["right"]] and self.x < screen_width - self.width:
             self.x = self.x + self.speed
+        
+        if keys[self.controls["shoot"]]:
+            if self.can_shoot():
+                return self.shoot()
+            
+        if keys[self.controls["reload"]] and self.num_bullets < 15:
+            self.reload()
 
     def update_cooldown(self):
         if self.shoot_cooldown > 0:
             self.shoot_cooldown = self.shoot_cooldown - 1
 
     def can_shoot(self):
-        return self.shoot_cooldown == 0
+        if self.shoot_cooldown == 0 and self.num_bullets > 0:
+            return True
+        else:
+            return False
 
     def shoot(self):
-        self.shoot_cooldown = 20
+        self.shoot_cooldown = self.inital_cool_time
+        self.num_bullets = self.num_bullets - 1
 
         if self.direction == 1:
             bullet_x = self.x + self.width
@@ -53,6 +66,9 @@ class Player:
         bullet_y = self.y + self.height // 2
 
         return Bullet(bullet_x, bullet_y, self.direction)
+    def reload(self):
+        self.shoot_cooldown = 200
+        self.num_bullets = 15
 
     def take_damage(self, damage):
         self.hp = self.hp - damage

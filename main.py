@@ -45,6 +45,7 @@ def create_players():
         "left": pygame.K_a,
         "right": pygame.K_d,
         "shoot": pygame.K_f,
+        "reload": pygame.K_r,
     }
 
     player2_controls = {
@@ -53,6 +54,7 @@ def create_players():
         "left": pygame.K_LEFT,
         "right": pygame.K_RIGHT,
         "shoot": pygame.K_SLASH,
+        "reload": pygame.K_PERIOD,
     }
 
     player1 = Player(100, 260, BLUE, player1_controls, 1)
@@ -100,6 +102,8 @@ def draw_game_page(player1, player2, bullets):
 
     draw_text("Player 1 HP: " + str(player1.hp), normal_font, BLUE, 30, 20)
     draw_text("Player 2 HP: " + str(player2.hp), normal_font, RED, SCREEN_WIDTH - 200, 20)
+    draw_text("Player 1 Bullets: " + str(player1.num_bullets), small_font, BLUE, 30, 50)
+    draw_text("Player 2 Bullets: " + str(player2.num_bullets), small_font, RED, SCREEN_WIDTH - 200, 50)
 
 
 def draw_game_over_page(winner):
