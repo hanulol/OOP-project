@@ -1,6 +1,8 @@
 import pygame
 import sys
 
+from red_bullet import Red_Bullet
+from yellow_bullet import Yellow_Bullet
 from player import Player
 pygame.init()
 
@@ -46,6 +48,8 @@ def create_players():
         "right": pygame.K_d,
         "shoot": pygame.K_f,
         "reload": pygame.K_r,
+        "red_bullet": pygame.K_c,
+        "yellow_bullet": pygame.K_q,
     }
 
     player2_controls = {
@@ -54,7 +58,9 @@ def create_players():
         "left": pygame.K_LEFT,
         "right": pygame.K_RIGHT,
         "shoot": pygame.K_SLASH,
-        "reload": pygame.K_PERIOD,
+        "reload": pygame.K_RALT,
+        "red_bullet": pygame.K_COMMA,
+        "yellow_bullet": pygame.K_PERIOD,
     }
 
     player1 = Player(100, 260, BLUE, player1_controls, 1)
@@ -74,10 +80,16 @@ def draw_instruction_page():
     draw_text("Player 1", normal_font, BLUE, 100, 290)
     draw_text("Move: W, A, S, D", small_font, BLACK, 120, 330)
     draw_text("Shoot: F", small_font, BLACK, 120, 360)
+    draw_text("Reload: R", small_font, BLACK, 120, 390)
+    draw_text("Red Bullet: C", small_font, BLACK, 120, 420)
+    draw_text("Yellow Bullet: Q", small_font, BLACK, 120, 450)
 
     draw_text("Player 2", normal_font, RED, 520, 290)
     draw_text("Move: Arrow keys", small_font, BLACK, 540, 330)
     draw_text("Shoot: / key", small_font, BLACK, 540, 360)
+    draw_text("Reload: Right ALT", small_font, BLACK, 540, 390)
+    draw_text("Red Bullet: , key", small_font, BLACK, 540, 420)
+    draw_text("Yellow Bullet: . key", small_font, BLACK, 540, 450)
 
     draw_text("Press SPACE to start", big_font, BLACK, SCREEN_WIDTH // 2, 500, True)
 
@@ -104,6 +116,8 @@ def draw_game_page(player1, player2, bullets):
     draw_text("Player 2 HP: " + str(player2.hp), normal_font, RED, SCREEN_WIDTH - 200, 20)
     draw_text("Player 1 Bullets: " + str(player1.num_bullets), small_font, BLUE, 30, 50)
     draw_text("Player 2 Bullets: " + str(player2.num_bullets), small_font, RED, SCREEN_WIDTH - 200, 50)
+    draw_text("Player 1 Red Bullets: " + str(Red_Bullet.get_num_red_bullets_left(player1)), small_font, BLUE, 30, 80)
+    draw_text("Player 2 Red Bullets: " + str(Red_Bullet.get_num_red_bullets_left(player2)), small_font, RED, SCREEN_WIDTH - 200, 80)
 
 
 def draw_game_over_page(winner):
@@ -176,6 +190,18 @@ while running:
 
                 if event.key == player2.controls["shoot"] and player2.can_shoot():
                     bullets.append(player2.shoot())
+                
+                if event.key == player1.controls["red_bullet"] and player1.can_shoot_red_bullet():
+                    bullets.append(player1.shoot_red_bullet())
+
+                if event.key == player2.controls["red_bullet"] and player2.can_shoot_red_bullet():
+                    bullets.append(player2.shoot_red_bullet())
+
+                if event.key == player1.controls["yellow_bullet"] and player1.can_shoot():
+                    bullets.append(player1.shoot_yellow_bullet())
+
+                if event.key == player2.controls["yellow_bullet"] and player2.can_shoot():
+                    bullets.append(player2.shoot_yellow_bullet())
 
             elif game_state == "game_over":
                 if event.key == pygame.K_r:

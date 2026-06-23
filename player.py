@@ -1,7 +1,8 @@
 import pygame
 
 from bullet import Bullet
-
+from red_bullet import Red_Bullet
+from yellow_bullet import Yellow_Bullet
 
 class Player:
     def __init__(self, x, y, color, controls, direction):
@@ -20,6 +21,7 @@ class Player:
         self.direction = direction
 
         self.shoot_cooldown = 0
+
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
@@ -44,6 +46,14 @@ class Player:
         if keys[self.controls["reload"]] and self.num_bullets < 15:
             self.reload()
 
+        if keys[self.controls["red_bullet"]]:
+            if self.can_shoot_red_bullet():
+                return self.shoot_red_bullet()
+            
+        if keys[self.controls["yellow_bullet"]]:
+            if self.can_shoot():
+                return self.shoot_yellow_bullet()
+
     def update_cooldown(self):
         if self.shoot_cooldown > 0:
             self.shoot_cooldown = self.shoot_cooldown - 1
@@ -66,6 +76,36 @@ class Player:
         bullet_y = self.y + self.height // 2
 
         return Bullet(bullet_x, bullet_y, self.direction)
+    
+    def can_shoot_red_bullet(self):
+        if self.shoot_cooldown == 0 and Red_Bullet.get_num_red_bullets_left(self) > 0:
+            return True
+        else:
+            return False
+    
+    def shoot_red_bullet(self):
+        self.shoot_cooldown = self.inital_cool_time
+
+        if self.direction == 1:
+            bullet_x = self.x + self.width
+        else:
+            bullet_x = self.x
+
+        bullet_y = self.y + self.height // 2
+
+        return Red_Bullet(bullet_x, bullet_y, self.direction)
+    
+    def shoot_yellow_bullet(self):
+        self.shoot_cooldown = self.inital_cool_time
+
+        if self.direction == 1:
+            bullet_x = self.x + self.width
+        else:
+            bullet_x = self.x
+
+        bullet_y = self.y + self.height // 2
+
+        return Yellow_Bullet(bullet_x, bullet_y, self.direction)
     def reload(self):
         self.shoot_cooldown = 200
         self.num_bullets = 15
