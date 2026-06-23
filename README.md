@@ -2,6 +2,11 @@
 
 A two-player local multiplayer shooting game built with **Python** and **Pygame**. Two players battle on a split-screen arena using different bullet types and strategic reloading.
 
+## Screenshots
+
+<img src="assets/screenshot1.png" width="50%" alt="Gameplay Screenshot 1">
+<img src="assets/screenshot2.png" width="50%" alt="Gameplay Screenshot 2">
+
 ## Gameplay
 
 - Each player has **100 HP** and **15 bullets** per magazine.
